@@ -1,0 +1,31 @@
+close all
+clear all
+
+n = 31;                           % order of the square matrix (board)
+disp_sol_visually = true;
+disp_sol_positions = true;
+random_hitting_order = false;     % hit solution positions randomly or 
+                                  % in ascending order
+
+
+% Initiate a random board configuration
+B_init = Create_initial(n);
+
+% Solve the initial board by getting all positions to hit (in c)
+[sol_pos,solution_exist] = solve_board(B_init);
+
+if solution_exist
+    if disp_sol_positions && disp_sol_visually
+        fprintf('The sequence of solution positions to be hit:\n')
+        disp(['The sequence of solution positions to be hit:\n'; sol_pos)
+        pause(1)
+        disp_whole_sol(B_init,sol_pos)
+    elseif disp_sol_positions && ~disp_sol_visually
+        fprintf('The sequence of solution positions to be hit:\n')
+        disp(sol_pos)
+    elseif ~disp_sol_positions && disp_sol_visually
+        disp_whole_sol(B_init,sol_pos)
+    end
+else
+    fprintf('No solution for the initial setting!\n')
+end

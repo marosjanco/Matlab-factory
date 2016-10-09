@@ -1,0 +1,49 @@
+function disp_whole_sol(B_init, sol_pos,random_hitting_order)
+    global A
+    
+    n = length(B_init);   % order of initial square board
+    length_hit = length(sol_pos);
+    pause_time = 2/n;
+    
+    % Display how the Whack-a-mole is solved (in order/random hitting)
+    B = B_init;
+    disp_bin_matrix(B,'The initial configuration:');
+    pause(3)
+
+    % Show which matrix positions where hit:
+    sol_bin = zeros(n*n,1);
+    sol_bin(sol_pos)=1;
+    C = Get_matrix(sol_bin);
+    disp_bin_matrix(C,['Black positions need to be hit to solve' ...
+        ' the problem:']);
+    pause(5)
+    
+    if random_hitting_order
+        % RANDOM HITTING
+        hit_positions_random = sol_pos(randperm(length_hit));
+        for k=1:length_hit
+            [i,j] = Get_coordinates(hit_positions_random(k),n);
+            B = mod(B+A{i,j},2);
+            pause(pause_time)
+            title_ = {'Hitting the true positions randomly:'; ...
+                ['(Coordinates just hit = (' num2str(i) ',' ...
+                num2str(j) '); ' num2str(length_hit-k) ' left)']};
+            disp_bin_matrix(B,title_)
+        end
+    else
+        % ORDERD HITTING (for convenience)
+        for k=1:length_hit
+            [i,j] = Get_coordinates(sol_pos(k),n);
+            B = mod(B+A{i,j},2);
+            pause(pause_time)
+            title_ = {'Hitting the true positions in order:'; ...
+                ['(Coordinates just hit = (' num2str(i) ',' ...
+                num2str(j) '); ' num2str(length_hit-k) ' left)']};
+            disp_bin_matrix(B,title_)
+        end
+    end
+    pause(1)
+
+
+    close
+end
